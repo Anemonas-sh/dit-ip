@@ -84,11 +84,14 @@ class IpWhitelister():
         # Get the incoming IP address
         request_ips = self.get_client_ip_list(request)
 
+        print('ip list', request_ips)
+
         for request_ip_str in request_ips:
             request_ip = ipaddress.ip_address(request_ip_str)
 
             # If it's in the ALLOWED_IPS, don't block it
             if request_ip_str in allowed_ips:
+                self.logger.warning('Found your ip on allowed_ips', request_ip_str)
                 block_request = False
                 break
 
@@ -106,7 +109,7 @@ class IpWhitelister():
 
             if block_request is False:
                 break                
-
+        self.logger.warning(block_request)
         return block_request
 
     def process_request(self, request):
